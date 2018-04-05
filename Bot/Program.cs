@@ -1,12 +1,24 @@
 ﻿using System;
+using System.IO;
+using Microsoft.Extensions.Configuration;
+using Telegram.Bot;
 
 namespace Bot
 {
-    class Program
+    internal class Program
     {
-        static void Main(string[] args)
+        private static void Main()
         {
-            Console.WriteLine("Hello World!");
+            var builder = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("appsettings.json");
+            var configuration = builder.Build();
+            var token = configuration["token"];
+            var client = new TelegramBotClient(token);
+            var bot = new Bot(client);
+            bot.Start();
+            Console.ReadLine();
+            bot.Stop();
         }
     }
 }
